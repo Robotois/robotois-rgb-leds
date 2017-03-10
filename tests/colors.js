@@ -1,14 +1,15 @@
-var _rgb = require('../index'),
-  rgb = new _rgb();
+const RGB = require('../index');
+
+const rgb = new RGB();
 
 setInterval(() => {
-  rgb.allToggle("#ff33cc");
-},500);
+  rgb.allToggle('#ff33cc');
+}, 500);
 
-process.on('SIGTERM', function () {
+process.on('SIGTERM', () => {
   process.exit();
 });
 
-process.on('SIGINT', function () {
+process.on('SIGINT', () => {
   process.exit();
 });
