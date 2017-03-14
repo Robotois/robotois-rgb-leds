@@ -1,6 +1,6 @@
 {
   "name": "robotois-rgb-leds",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Library to set the colors on the RGB LEDs Module",
   "main": "index.js",
   "scripts": {
@@ -19,8 +19,8 @@
   ],
   "license": "ISC",
   "dependencies": {
-     "bindings": "^1.2.1"
-   },
+    "bindings": "^1.2.1"
+  },
   "gypfile": true,
   "devDependencies": {
     "babel-eslint": "^7.1.1",
