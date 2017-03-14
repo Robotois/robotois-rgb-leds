@@ -45,16 +45,6 @@ RGBModule.prototype.setRGB = function setRGB(_ledNumber, _red, _green, _blue) {
   this.rgb.setRGB(_ledNumber, _red, _green, _blue);
 };
 
-RGBModule.prototype.blinkRGB = function blinkRGB(_ledNumber, _red, _green, _blue) {
-  this.rgb.setRGB(_ledNumber, _red, _green, _blue);
-  setTimeout(
-    () => {
-      this.rgb.ledOff(_ledNumber);
-    },
-    1000,
-  );
-};
-
 RGBModule.prototype.turnOff = function turnOff(ledNumber) {
   this.rgb.ledOff(ledNumber);
   this.ledsOn[ledNumber] = false;
