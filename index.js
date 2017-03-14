@@ -72,6 +72,7 @@ RGBModule.prototype.allToggle = function allToggle(hexColor) {
     this.allOff();
   }
 };
+
 RGBModule.prototype.toggle = function toggle(ledNumber, hexColor) {
   if (this.ledsOn[ledNumber]) {
     this.turnOff(0);
@@ -79,14 +80,12 @@ RGBModule.prototype.toggle = function toggle(ledNumber, hexColor) {
     this.turnOn(ledNumber, hexColor);
   }
 };
+
 RGBModule.prototype.blink = function blink(ledNumber, hexColor) {
   if (!this.interval[ledNumber]) {
-    this.interval[ledNumber] = setInterval(
-      () => {
-        this.toggle(ledNumber, hexColor);
-      },
-      400,
-    ); // cambiar estado cada 400ms
+    this.interval[ledNumber] = setInterval(() => {
+      this.toggle(ledNumber, hexColor);
+    }, 400); // cambiar estado cada 400ms
   }
 };
 
