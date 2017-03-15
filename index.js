@@ -24,10 +24,10 @@ function RGBModule(portNumber) {
   this.rgb = new LEDRGBModule(portNumber);
   this.all_status = false; // Initially off
   this.ledsOn = {
-    led1: false,
-    led2: false,
-    led3: false,
-    led4: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
   };
   this.interval = {};
 
@@ -46,15 +46,13 @@ RGBModule.prototype.setRGB = function setRGB(_ledNumber, _red, _green, _blue) {
 };
 
 RGBModule.prototype.turnOff = function turnOff(ledNumber) {
-  const led = ledNumber.replace('led', '') * 1;
-  this.rgb.ledOff(led);
+  this.rgb.ledOff(ledNumber);
   this.ledsOn[ledNumber] = false;
 };
 
 RGBModule.prototype.turnOn = function turnOn(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
-  const led = ledNumber.replace('led', '') * 1;
-  this.rgb.setRGB(led, rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.rgb.setRGB(ledNumber, rgbColor[0], rgbColor[1], rgbColor[2]);
   this.ledsOn[ledNumber] = true;
 };
 
@@ -96,7 +94,7 @@ RGBModule.prototype.allOff = function allOff() {
 };
 
 RGBModule.prototype.release = function release() {
-  [1, 2, 3, 4].forEach(i => clearInterval(this.interval[`led${i}`]));
+  [1, 2, 3, 4].forEach(i => clearInterval(this.interval[i]));
   this.rgb.release();
 };
 
