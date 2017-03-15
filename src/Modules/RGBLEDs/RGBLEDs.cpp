@@ -40,7 +40,7 @@ RGBLEDs::~RGBLEDs() {
 
 void RGBLEDs::setRGB(uint8_t _led_number, uint8_t _red_code, uint8_t _green_code, uint8_t _blue_code){
     if(_led_number < 1 or _led_number > 4){
-        printf("Wrong LED selection...\n");
+        printf("Wrong LED selection... %d",_led_number);
         return;
 //        return;
     }
@@ -80,7 +80,7 @@ void RGBLEDs::blinkRGB(uint8_t _led_number, uint8_t _red_code, uint8_t _green_co
 }
 
 void RGBLEDs::ledOff(uint8_t _led_number){
-    if(_led_number < 1 or _led_number > 3){
+    if(_led_number < 1 or _led_number > 4){
         printf("Wrong LED selection...\n");
         return;
 //        return;
