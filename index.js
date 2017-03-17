@@ -32,11 +32,11 @@ function RGBModule(portNumber) {
   this.interval = {};
 
   process.on('SIGINT', () => {
-    self.rgb.release();
+    self.release();
   });
 
   process.on('SIGTERM', () => {
-    self.rgb.release();
+    self.release();
   });
 }
 
@@ -95,8 +95,8 @@ RGBModule.prototype.allOff = function allOff() {
 };
 
 RGBModule.prototype.release = function release() {
-  [1, 2, 3, 4].forEach(i => clearInterval(this.interval[i]));
   this.rgb.release();
+  [1, 2, 3, 4].forEach(i => clearInterval(this.interval[i]));
 };
 
 module.exports = RGBModule;

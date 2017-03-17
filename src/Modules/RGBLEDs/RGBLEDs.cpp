@@ -92,13 +92,14 @@ void RGBLEDs::ledOff(uint8_t _led_number){
 }
 
 void RGBLEDs::release(){
-    pwmModule->allOff();
+  // printf("[!!\n");
+  // pwmModule->isDeviceOnline();
+    // allOff();
     pwmModule->release();
     delete pwmModule;
     delete rgbCode;
-    powerOn = false;
 
-    printf("[RGBModule] => Released\n");
+    printf("[RGBModule] => Released!!\n");
 }
 
 void RGBLEDs::allOff(){

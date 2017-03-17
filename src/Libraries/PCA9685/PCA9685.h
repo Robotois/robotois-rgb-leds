@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   PCA9685.h
  * Author: yova
  *
@@ -26,7 +26,7 @@ public:
     PCA9685(uint8_t _addr = 0x00);
     PCA9685(const PCA9685& orig);
     virtual ~PCA9685();
-    
+
     void selectModule();
     void setPreScale(uint8_t _pre_scale);
     void setInvertedMode();
@@ -35,20 +35,20 @@ public:
     void setPWM(uint8_t _channel, uint16_t _pwm);
     void setPWM(uint8_t _init_channel, uint8_t _channel_count, uint16_t *_pwm_array);
     void setOn(uint8_t _channel);
-    
+
     void release();
+    void isDeviceOnline();
 private:
     uint8_t slave_addr;
     uint16_t onTime, offTime;
     bool invertedMode;
     char rBuf[10]; // - Max length
     char wBuf[10]; // - Max length
-    
+
     void initialize();
     void bcm_init();
     void bcm_end();
-    
+
 };
 
 #endif	/* PCA9685_H */
-

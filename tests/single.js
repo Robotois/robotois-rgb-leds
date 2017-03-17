@@ -7,7 +7,7 @@ setInterval(() => {
   rgb.toggle(2, `#${Math.floor(Math.random() * 16777215).toString(16)}`);
   rgb.toggle(3, `#${Math.floor(Math.random() * 16777215).toString(16)}`);
   rgb.toggle(4, `#${Math.floor(Math.random() * 16777215).toString(16)}`);
-}, 1000);
+}, 500);
 
 process.on('SIGTERM', () => {
   process.exit();
