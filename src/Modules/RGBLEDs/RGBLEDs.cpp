@@ -28,7 +28,7 @@ RGBLEDs::RGBLEDs(uint8_t _addr) {
     pwmModule->setOn(15);
     powerOn = true;
 
-    pwmRatio = 4095.0f/(1.5*255.0f); // Using only a 3rd of the LEDs full brightness
+    pwmRatio = 4095.0f/(2*255.0f); // Using only a 3rd of the LEDs full brightness
     rgbCode = new uint16_t[3*4]; // 4 LEDs max
 }
 

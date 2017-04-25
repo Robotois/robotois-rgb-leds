@@ -30,6 +30,7 @@ function RGBModule(portNumber) {
     4: false,
   };
   this.interval = {};
+  this.allInterval = null;
 
   process.on('SIGINT', () => {
     self.release();
@@ -45,11 +46,6 @@ RGBModule.prototype.setRGB = function setRGB(_ledNumber, _red, _green, _blue) {
   this.rgb.setRGB(_ledNumber, _red, _green, _blue);
 };
 
-RGBModule.prototype.turnOff = function turnOff(ledNumber) {
-  this.rgb.ledOff(ledNumber);
-  this.ledsOn[ledNumber] = false;
-};
-
 RGBModule.prototype.turnOn = function turnOn(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
   // console.log("LED Number: " + ledNumber);
@@ -57,20 +53,9 @@ RGBModule.prototype.turnOn = function turnOn(ledNumber, hexColor) {
   this.ledsOn[ledNumber] = true;
 };
 
-RGBModule.prototype.allOn = function allOn(hexColor) {
-  const rgbColor = hexToRGB(hexColor);
-  this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
-  this.all_status = true;
-};
-
-RGBModule.prototype.allToggle = function allToggle(hexColor) {
-  if (!this.all_status) {
-    const rgbColor = hexToRGB(hexColor);
-    this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
-    this.all_status = true;
-  } else {
-    this.allOff();
-  }
+RGBModule.prototype.turnOff = function turnOff(ledNumber) {
+  this.rgb.ledOff(ledNumber);
+  this.ledsOn[ledNumber] = false;
 };
 
 RGBModule.prototype.toggle = function toggle(ledNumber, hexColor) {
@@ -89,14 +74,56 @@ RGBModule.prototype.blink = function blink(ledNumber, hexColor) {
   }
 };
 
+RGBModule.prototype.blinkOff = function blinkOff(ledNumber) {
+  if (this.interval != null) {
+    clearInterval(this.interval[ledNumber]);
+    this.interval[ledNumber] = null;
+  }
+  this.turnOff(ledNumber);
+};
+
+RGBModule.prototype.allOn = function allOn(hexColor) {
+  const rgbColor = hexToRGB(hexColor);
+  this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.all_status = true;
+};
+
 RGBModule.prototype.allOff = function allOff() {
   this.rgb.allOff();
   this.all_status = false;
 };
 
+RGBModule.prototype.allToggle = function allToggle(hexColor) {
+  if (!this.all_status) {
+    const rgbColor = hexToRGB(hexColor);
+    this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
+    this.all_status = true;
+  } else {
+    this.allOff();
+  }
+};
+
+RGBModule.prototype.allBlink = function allBlink(hexColor) {
+  if (!this.allInterval) {
+    this.allInterval = setInterval(() => {
+      this.allToggle(hexColor);
+    }, 500);
+  }
+};
+
+RGBModule.prototype.allBlinkOff = function allBlinkOff() {
+  if (this.allInterval != null) {
+    clearInterval(this.allInterval);
+    this.allInterval = null;
+  }
+  this.allOff();
+};
+
+
 RGBModule.prototype.release = function release() {
   this.rgb.release();
   [1, 2, 3, 4].forEach(i => clearInterval(this.interval[i]));
+  clearInterval(this.allInterval);
 };
 
 module.exports = RGBModule;
