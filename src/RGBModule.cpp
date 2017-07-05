@@ -122,4 +122,3 @@ void RGBModule::release(){
     allOff();
     printf("[RGBModule] => Released\n");
 }
-
