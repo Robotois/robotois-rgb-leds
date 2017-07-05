@@ -2,9 +2,12 @@ const RGB = require('../index');
 
 const rgb = new RGB();
 
-setInterval(() => {
-  rgb.allToggle(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
-}, 500);
+// rgb.setRGB(1, 204, 51, 153);
+rgb.rainbow();
+
+setTimeout(() => {
+  rgb.release();
+}, 10000);
 
 process.on('SIGTERM', () => {
   process.exit();

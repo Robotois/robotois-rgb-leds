@@ -6,7 +6,7 @@ using namespace v8;
 Persistent<Function> RGBWrapper::constructor;
 
 RGBWrapper::RGBWrapper(uint8_t _add){
-  rgb = new RGBLEDs(_add);
+  rgb = new RGBModule(_add);
 }
 
 RGBWrapper::~RGBWrapper(){
@@ -30,12 +30,14 @@ void RGBWrapper::Init(){
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl,"setRGB",setRGB);
-  NODE_SET_PROTOTYPE_METHOD(tpl,"allOn",allOn);
-  NODE_SET_PROTOTYPE_METHOD(tpl,"blinkRGB",blinkRGB);
-  NODE_SET_PROTOTYPE_METHOD(tpl,"ledOff",ledOff);
-  NODE_SET_PROTOTYPE_METHOD(tpl,"allOff",allOff);
-  NODE_SET_PROTOTYPE_METHOD(tpl,"release",release);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "allOn", allOn);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "allOff", allOff);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "turnOn", turnOn);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "turnOff", turnOff);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "blink", blink);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "allBlink", allBlink);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "rainbow", rainbow);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "release",release);
 
   constructor.Reset(isolate,tpl->GetFunction());
 }
@@ -102,7 +104,7 @@ void RGBWrapper::NewInstance(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(instance);
 }
 
-void RGBWrapper::setRGB(const FunctionCallbackInfo<Value>& args){
+void RGBWrapper::turnOn(const FunctionCallbackInfo<Value>& args){
   Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
 
@@ -111,7 +113,7 @@ void RGBWrapper::setRGB(const FunctionCallbackInfo<Value>& args){
   // - The RGB code can take values in the range of 0 - 255 for each channel
   if(_argc != 4){
     isolate->ThrowException(Exception::TypeError(
-    String::NewFromUtf8(isolate, "Wrong arguments...")));
+    String::NewFromUtf8(isolate, "[RGBModule] => turnOn: Wrong arguments...")));
   }
 
   uint8_t ledNumber = (uint8_t) args[0]->NumberValue(),
@@ -120,8 +122,25 @@ void RGBWrapper::setRGB(const FunctionCallbackInfo<Value>& args){
     blueCode = (uint8_t) args[3]->NumberValue();
 
   RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
-  temp_obj->rgb->setRGB(ledNumber,redCode,greenCode,blueCode);
-  // args.GetReturnValue().Set();
+  temp_obj->rgb->turnOn(ledNumber,redCode,greenCode,blueCode);
+}
+
+void RGBWrapper::turnOff(const FunctionCallbackInfo<Value>& args){
+  Isolate* isolate = Isolate::GetCurrent();
+  HandleScope scope(isolate);
+
+  uint8_t _argc = args.Length();
+  // - It is required four arguments: LedNumber, RedCode, GreenCode and BlueCode
+  // - The RGB code can take values in the range of 0 - 255 for each channel
+  if(_argc != 1){
+    isolate->ThrowException(Exception::TypeError(
+    String::NewFromUtf8(isolate, "[RGBModule] => turnOff: Wrong arguments...")));
+  }
+
+  uint8_t ledNumber = (uint8_t) args[0]->NumberValue();
+
+  RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
+  temp_obj->rgb->turnOff(ledNumber);
 }
 
 void RGBWrapper::allOn(const FunctionCallbackInfo<Value>& args){
@@ -142,10 +161,17 @@ void RGBWrapper::allOn(const FunctionCallbackInfo<Value>& args){
 
   RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
   temp_obj->rgb->allOn(redCode,greenCode,blueCode);
-  // args.GetReturnValue().Set();
 }
 
-void RGBWrapper::blinkRGB(const FunctionCallbackInfo<Value>& args){
+void RGBWrapper::allOff(const FunctionCallbackInfo<Value>& args){
+  Isolate* isolate = Isolate::GetCurrent();
+  HandleScope scope(isolate);
+
+  RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
+  temp_obj->rgb->allOff();
+}
+
+void RGBWrapper::blink(const FunctionCallbackInfo<Value>& args){
   Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
 
@@ -163,34 +189,35 @@ void RGBWrapper::blinkRGB(const FunctionCallbackInfo<Value>& args){
     blueCode = (uint8_t) args[3]->NumberValue();
 
   RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
-  temp_obj->rgb->blinkRGB(ledNumber,redCode,greenCode,blueCode);
-  // args.GetReturnValue().Set();
+  temp_obj->rgb->blink(ledNumber,redCode,greenCode,blueCode);
 }
 
-void RGBWrapper::ledOff(const FunctionCallbackInfo<Value>& args){
+void RGBWrapper::allBlink(const FunctionCallbackInfo<Value>& args){
   Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
 
   uint8_t _argc = args.Length();
   // - It is required four arguments: LedNumber, RedCode, GreenCode and BlueCode
   // - The RGB code can take values in the range of 0 - 255 for each channel
-  if(_argc != 1){
+  if(_argc != 3){
     isolate->ThrowException(Exception::TypeError(
     String::NewFromUtf8(isolate, "Wrong arguments...")));
   }
 
-  uint8_t ledNumber = (uint8_t) args[0]->NumberValue();
+  uint8_t redCode = (uint8_t) args[1]->NumberValue(),
+    greenCode = (uint8_t) args[2]->NumberValue(),
+    blueCode = (uint8_t) args[3]->NumberValue();
+
+//  printf("RGB: %d, %d, %d\n", redCode, greenCode, blueCode);
 
   RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
-  temp_obj->rgb->ledOff(ledNumber);
-  // args.GetReturnValue().Set();
+  temp_obj->rgb->allBlink(redCode,greenCode,blueCode);
 }
 
-void RGBWrapper::allOff(const FunctionCallbackInfo<Value>& args){
+void RGBWrapper::rainbow(const FunctionCallbackInfo<Value>& args){
   Isolate* isolate = Isolate::GetCurrent();
   HandleScope scope(isolate);
 
   RGBWrapper* temp_obj = ObjectWrap::Unwrap<RGBWrapper>(args.Holder());
-  // temp_obj->rgb->release();
-  temp_obj->rgb->allOff();
+  temp_obj->rgb->rainbow();
 }

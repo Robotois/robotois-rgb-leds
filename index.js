@@ -29,8 +29,6 @@ function RGBModule(portNumber) {
     3: false,
     4: false,
   };
-  this.interval = {};
-  this.allInterval = null;
 
   process.on('SIGINT', () => {
     self.release();
@@ -42,88 +40,56 @@ function RGBModule(portNumber) {
 }
 
 // - Implementar la funcion turnOn => ["Nombre del led", "color en hexa"]
-RGBModule.prototype.setRGB = function setRGB(_ledNumber, _red, _green, _blue) {
-  this.rgb.setRGB(_ledNumber, _red, _green, _blue);
+RGBModule.prototype.turnOnHex = function turnOnHex(_ledNumber, _red, _green, _blue) {
+  this.rgb.turnOn(_ledNumber - 1, _red, _green, _blue);
 };
 
 RGBModule.prototype.turnOn = function turnOn(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
-  // console.log("LED Number: " + ledNumber);
-  this.rgb.setRGB(ledNumber, rgbColor[0], rgbColor[1], rgbColor[2]);
-  this.ledsOn[ledNumber] = true;
+  this.rgb.turnOn(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
 RGBModule.prototype.turnOff = function turnOff(ledNumber) {
-  this.rgb.ledOff(ledNumber);
-  this.ledsOn[ledNumber] = false;
+  this.rgb.turnOff(ledNumber - 1);
 };
 
-RGBModule.prototype.toggle = function toggle(ledNumber, hexColor) {
-  if (this.ledsOn[ledNumber]) {
-    this.turnOff(ledNumber);
-  } else {
-    this.turnOn(ledNumber, hexColor);
-  }
+RGBModule.prototype.blinkHex = function blinkHex(ledNumber, hexColor) {
+  const rgbColor = hexToRGB(hexColor);
+  this.rgb.blink(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
-RGBModule.prototype.blink = function blink(ledNumber, hexColor) {
-  if (!this.interval[ledNumber]) {
-    this.interval[ledNumber] = setInterval(() => {
-      this.toggle(ledNumber, hexColor);
-    }, 400); // cambiar estado cada 400ms
-  }
+RGBModule.prototype.blink = function blink(ledNumber, red, green, blue) {
+  this.rgb.blink(ledNumber - 1, red, green, blue);
 };
 
-RGBModule.prototype.blinkOff = function blinkOff(ledNumber) {
-  if (this.interval != null) {
-    clearInterval(this.interval[ledNumber]);
-    this.interval[ledNumber] = null;
-  }
-  this.turnOff(ledNumber);
-};
-
-RGBModule.prototype.allOn = function allOn(hexColor) {
+RGBModule.prototype.allOnHex = function allOnHex(hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
-  this.all_status = true;
+};
+
+RGBModule.prototype.allOn = function allOn(red, green, blue) {
+  this.rgb.allOn(red, green, blue);
 };
 
 RGBModule.prototype.allOff = function allOff() {
   this.rgb.allOff();
-  this.all_status = false;
 };
 
-RGBModule.prototype.allToggle = function allToggle(hexColor) {
-  if (!this.all_status) {
-    const rgbColor = hexToRGB(hexColor);
-    this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
-    this.all_status = true;
-  } else {
-    this.allOff();
-  }
+RGBModule.prototype.allBlinkHex = function allBlinkHex(hexColor) {
+  const rgbColor = hexToRGB(hexColor);
+  this.rgb.allBlink(rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
-RGBModule.prototype.allBlink = function allBlink(hexColor) {
-  if (!this.allInterval) {
-    this.allInterval = setInterval(() => {
-      this.allToggle(hexColor);
-    }, 500);
-  }
+RGBModule.prototype.allBlink = function allBlink(red, green, blue) {
+  this.rgb.allBlink(red, green, blue);
 };
 
-RGBModule.prototype.allBlinkOff = function allBlinkOff() {
-  if (this.allInterval != null) {
-    clearInterval(this.allInterval);
-    this.allInterval = null;
-  }
-  this.allOff();
+RGBModule.prototype.rainbow = function rainbow() {
+  this.rgb.rainbow();
 };
-
 
 RGBModule.prototype.release = function release() {
   this.rgb.release();
-  [1, 2, 3, 4].forEach(i => clearInterval(this.interval[i]));
-  clearInterval(this.allInterval);
 };
 
 module.exports = RGBModule;
