@@ -204,9 +204,9 @@ void RGBWrapper::allBlink(const FunctionCallbackInfo<Value>& args){
     String::NewFromUtf8(isolate, "Wrong arguments...")));
   }
 
-  uint8_t redCode = (uint8_t) args[1]->NumberValue(),
-    greenCode = (uint8_t) args[2]->NumberValue(),
-    blueCode = (uint8_t) args[3]->NumberValue();
+  uint8_t redCode = (uint8_t) args[0]->NumberValue(),
+    greenCode = (uint8_t) args[1]->NumberValue(),
+    blueCode = (uint8_t) args[2]->NumberValue();
 
 //  printf("RGB: %d, %d, %d\n", redCode, greenCode, blueCode);
 

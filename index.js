@@ -77,6 +77,7 @@ RGBModule.prototype.allOff = function allOff() {
 
 RGBModule.prototype.allBlink = function allBlink(hexColor) {
   const rgbColor = hexToRGB(hexColor);
+  console.log(rgbColor);
   this.rgb.allBlink(rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 

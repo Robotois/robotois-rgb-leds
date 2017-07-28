@@ -11,34 +11,37 @@ void i2c_end();
 int main(int argc, char const *argv[]) {
 //    i2c_init();
     RGBModule *rgbModule = new RGBModule();
-    while(true){
-        rgbModule->rainbow();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        rgbModule->allOn(64,224,208);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        rgbModule->allOn(128,0,128);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        rgbModule->allOff();
-        rgbModule->turnOn(0,128,0,0);
-        rgbModule->turnOn(1,0,128,0);
-        rgbModule->turnOn(2,0,0,128);
-        rgbModule->turnOn(3,128,0,0);
-        rgbModule->turnOn(4,0,128,0);
-        rgbModule->turnOn(5,0,0,128);
-        rgbModule->turnOn(6,128,0,0);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        rgbModule->allBlink(64,224,208);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-        rgbModule->allOff();        
-        rgbModule->blink(0,128,0,0);
-        rgbModule->blink(1,0,128,0);
-        rgbModule->blink(2,0,0,128);
-        rgbModule->blink(3,128,0,0);
-        rgbModule->blink(4,0,128,0);
-        rgbModule->blink(5,0,0,128);
-        rgbModule->blink(6,0,0,128);
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    }
+    rgbModule->allBlink(86,15,126);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    rgbModule->allOff();
+    // while(true){
+    //     rgbModule->rainbow();
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    //     rgbModule->allOn(64,224,208);
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    //     rgbModule->allOn(128,0,128);
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    //     rgbModule->allOff();
+    //     rgbModule->turnOn(0,128,0,0);
+    //     rgbModule->turnOn(1,0,128,0);
+    //     rgbModule->turnOn(2,0,0,128);
+    //     rgbModule->turnOn(3,128,0,0);
+    //     rgbModule->turnOn(4,0,128,0);
+    //     rgbModule->turnOn(5,0,0,128);
+    //     rgbModule->turnOn(6,128,0,0);
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    //     rgbModule->allBlink(64,224,208);
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    //     rgbModule->allOff();
+    //     rgbModule->blink(0,128,0,0);
+    //     rgbModule->blink(1,0,128,0);
+    //     rgbModule->blink(2,0,0,128);
+    //     rgbModule->blink(3,128,0,0);
+    //     rgbModule->blink(4,0,128,0);
+    //     rgbModule->blink(5,0,0,128);
+    //     rgbModule->blink(6,0,0,128);
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    // }
 
     i2c_end();
     return 0;
