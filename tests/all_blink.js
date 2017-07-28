@@ -2,7 +2,7 @@ const RGB = require('../index');
 
 const rgb = new RGB();
 
-rgb.allBlinkHex(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+rgb.allBlink(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
 
 setTimeout(() => {
   rgb.allOff();

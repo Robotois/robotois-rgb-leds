@@ -40,7 +40,7 @@ function RGBModule(portNumber) {
 }
 
 // - Implementar la funcion turnOn => ["Nombre del led", "color en hexa"]
-RGBModule.prototype.turnOnHex = function turnOnHex(_ledNumber, _red, _green, _blue) {
+RGBModule.prototype.turnOnRGB = function turnOnRGB(_ledNumber, _red, _green, _blue) {
   this.rgb.turnOn(_ledNumber - 1, _red, _green, _blue);
 };
 
@@ -53,21 +53,21 @@ RGBModule.prototype.turnOff = function turnOff(ledNumber) {
   this.rgb.turnOff(ledNumber - 1);
 };
 
-RGBModule.prototype.blinkHex = function blinkHex(ledNumber, hexColor) {
+RGBModule.prototype.blink = function blink(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.blink(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
-RGBModule.prototype.blink = function blink(ledNumber, red, green, blue) {
+RGBModule.prototype.blinkRGB = function blinkRGB(ledNumber, red, green, blue) {
   this.rgb.blink(ledNumber - 1, red, green, blue);
 };
 
-RGBModule.prototype.allOnHex = function allOnHex(hexColor) {
+RGBModule.prototype.allOn = function allOn(hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
-RGBModule.prototype.allOn = function allOn(red, green, blue) {
+RGBModule.prototype.allOnRGB = function allOnRGB(red, green, blue) {
   this.rgb.allOn(red, green, blue);
 };
 
@@ -75,12 +75,12 @@ RGBModule.prototype.allOff = function allOff() {
   this.rgb.allOff();
 };
 
-RGBModule.prototype.allBlinkHex = function allBlinkHex(hexColor) {
+RGBModule.prototype.allBlink = function allBlink(hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.allBlink(rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
-RGBModule.prototype.allBlink = function allBlink(red, green, blue) {
+RGBModule.prototype.allBlinkRGB = function allBlinkRGB(red, green, blue) {
   this.rgb.allBlink(red, green, blue);
 };
 

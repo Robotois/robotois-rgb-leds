@@ -2,7 +2,7 @@ const RGB = require('../index');
 
 const rgb = new RGB();
 
-rgb.allOnHex('#cc3399');
+rgb.allOn('#cc3399');
 
 setTimeout(() => {
   rgb.allOff();
