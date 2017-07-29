@@ -39,7 +39,24 @@ function RGBModule(portNumber) {
   });
 }
 
-// - Implementar la funcion turnOn => ["Nombre del led", "color en hexa"]
+RGBModule.prototype.write = function write(ledNumber, hexColor, value) {
+  const rgbColor = hexToRGB(hexColor);
+  if (value === 1) {
+    this.rgb.turnOn(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
+  } else {
+    this.rgb.turnOff(ledNumber - 1);
+  }
+};
+
+RGBModule.prototype.allWrite = function write(hexColor, value) {
+  const rgbColor = hexToRGB(hexColor);
+  if (value === 1) {
+    this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
+  } else {
+    this.rgb.allOff();
+  }
+};
+
 RGBModule.prototype.turnOnRGB = function turnOnRGB(_ledNumber, _red, _green, _blue) {
   this.rgb.turnOn(_ledNumber - 1, _red, _green, _blue);
 };
@@ -77,7 +94,6 @@ RGBModule.prototype.allOff = function allOff() {
 
 RGBModule.prototype.allBlink = function allBlink(hexColor) {
   const rgbColor = hexToRGB(hexColor);
-  console.log(rgbColor);
   this.rgb.allBlink(rgbColor[0], rgbColor[1], rgbColor[2]);
 };
 
