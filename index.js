@@ -22,13 +22,7 @@ function RGBModule(portNumber) {
   const self = this;
 
   this.rgb = new LEDRGBModule(portNumber);
-  this.all_status = false; // Initially off
-  this.ledsOn = {
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-  };
+  this.ledsStatus = {};
 
   process.on('SIGINT', () => {
     self.release();
@@ -39,21 +33,28 @@ function RGBModule(portNumber) {
   });
 }
 
+RGBModule.prototype.publishNow = function publishNow() {
+  this.mqttClient.publish(this.myTopic, this.prevMessage);
+};
+
+RGBModule.prototype.setMqttClient = function setMqttClient(mqttConfig) {
+  this.mqttClient = mqttConfig.mqttClient;
+  this.myTopic = `digitalOutputs/rgbModule${mqttConfig.instance}`;
+};
+
 RGBModule.prototype.write = function write(ledNumber, hexColor, value) {
-  const rgbColor = hexToRGB(hexColor);
   if (value === 1) {
-    this.rgb.turnOn(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
+    this.turnOn(ledNumber, hexColor);
   } else {
-    this.rgb.turnOff(ledNumber - 1);
+    this.turnOff(ledNumber);
   }
 };
 
 RGBModule.prototype.allWrite = function write(hexColor, value) {
-  const rgbColor = hexToRGB(hexColor);
   if (value === 1) {
-    this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
+    this.allOn(hexColor);
   } else {
-    this.rgb.allOff();
+    this.allOff();
   }
 };
 
@@ -61,18 +62,42 @@ RGBModule.prototype.turnOnRGB = function turnOnRGB(_ledNumber, _red, _green, _bl
   this.rgb.turnOn(_ledNumber - 1, _red, _green, _blue);
 };
 
+RGBModule.prototype.mqttMessage = function mqttMessage(ledNumber, color, status) {
+  this.ledsStatus = ledNumber !== -1
+  ? {
+    all: undefined,
+    ...this.ledsStatus,
+    [`led${ledNumber}`]: {
+      status,
+      color,
+    },
+  }
+  : {
+    all: {
+      status,
+      color,
+    },
+  };
+  if (this.mqttClient) {
+    this.mqttClient.publish(this.myTopic, JSON.stringify(this.ledsStatus));
+  }
+};
+
 RGBModule.prototype.turnOn = function turnOn(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.turnOn(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.mqttMessage(ledNumber, hexColor, 'on');
 };
 
 RGBModule.prototype.turnOff = function turnOff(ledNumber) {
   this.rgb.turnOff(ledNumber - 1);
+  this.mqttMessage(ledNumber, undefined, 'off');
 };
 
 RGBModule.prototype.blink = function blink(ledNumber, hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.blink(ledNumber - 1, rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.mqttMessage(ledNumber, hexColor, 'blink');
 };
 
 RGBModule.prototype.blinkRGB = function blinkRGB(ledNumber, red, green, blue) {
@@ -82,6 +107,7 @@ RGBModule.prototype.blinkRGB = function blinkRGB(ledNumber, red, green, blue) {
 RGBModule.prototype.allOn = function allOn(hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.allOn(rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.mqttMessage(-1, hexColor, 'on');
 };
 
 RGBModule.prototype.allOnRGB = function allOnRGB(red, green, blue) {
@@ -90,11 +116,13 @@ RGBModule.prototype.allOnRGB = function allOnRGB(red, green, blue) {
 
 RGBModule.prototype.allOff = function allOff() {
   this.rgb.allOff();
+  this.mqttMessage(-1, undefined, 'off');
 };
 
 RGBModule.prototype.allBlink = function allBlink(hexColor) {
   const rgbColor = hexToRGB(hexColor);
   this.rgb.allBlink(rgbColor[0], rgbColor[1], rgbColor[2]);
+  this.mqttMessage(-1, hexColor, 'blink');
 };
 
 RGBModule.prototype.allBlinkRGB = function allBlinkRGB(red, green, blue) {

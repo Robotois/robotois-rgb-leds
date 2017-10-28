@@ -17,6 +17,11 @@
       "url": "http://armando.mx/"
     }
   ],
+  "homepage": "https://github.com/Robotois/robotois-rgb-leds",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robotois/robotois-rgb-leds.git"
+  },
   "license": "ISC",
   "dependencies": {
     "bindings": "^1.2.1"
