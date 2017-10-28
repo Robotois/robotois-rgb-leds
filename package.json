@@ -1,6 +1,6 @@
 {
   "name": "robotois-rgb-leds",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "Library to set the colors on the RGB LEDs Module",
   "main": "index.js",
   "scripts": {
